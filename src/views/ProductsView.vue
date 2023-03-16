@@ -1,6 +1,6 @@
 <template lang="">
     <div class="position-relative d-flex align-items-center justify-content-center" style="min-height: 400px;">
-      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-image: url('../src/assets/seabed.png'); background-position: center center; opacity: 0.8;"></div>
+      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-image: url('../mini_fish_tank/src/assets/seabed.png'); background-position: center center; opacity: 0.8;"></div>
       <h2 class="fw-bold">小魚缸設備</h2>
     </div>
     <div class="container mt-md-5 mt-3 mb-7">
