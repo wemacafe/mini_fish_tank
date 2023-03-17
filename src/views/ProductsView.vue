@@ -143,7 +143,6 @@ export default {
     },
     mounted() {
         this.getProducts()
-        console.log("seabed:",seabed)
     }
 }
 </script>
