@@ -1,6 +1,7 @@
 <template lang="">
     <div class="position-relative d-flex align-items-center justify-content-center" style="min-height: 400px;">
-      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-image: url('../mini_fish_tank/src/assets/seabed.png'); background-position: center center; opacity: 0.8;"></div>
+      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-position: center center; opacity: 0.8;"
+      :style="{'background-image':`url(${seabed})`}"></div>
       <h2 class="fw-bold">小魚缸設備</h2>
     </div>
     <div class="container mt-md-5 mt-3 mb-7">
@@ -96,6 +97,7 @@
     </div>
 </template>
 <script>
+import seabed from '@/assets/seabed.png'
 import Pagination from '@/components/PaginationView.vue'
 import '@fortawesome/fontawesome-free/css/all.css';
 import { RouterLink } from 'vue-router'
@@ -104,6 +106,7 @@ export default {
     // 取得產品列表
     data(){
         return{
+            seabed,
             products:[],
             isContentVisible1: true,
             isContentVisible2: false,
@@ -133,7 +136,6 @@ export default {
           }
             this.$http(tar_url)
             .then(res=>{
-            console.log(res)
             this.products=res.data.products
             this.pagination = res.data.pagination
             })
@@ -141,6 +143,7 @@ export default {
     },
     mounted() {
         this.getProducts()
+        console.log("seabed:",seabed)
     }
 }
 </script>

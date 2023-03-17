@@ -1,6 +1,7 @@
 <template lang="">
     <div class="position-relative d-flex align-items-center justify-content-center" style="min-height: 200px;">
-      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-image: url('../mini_fish_tank/src/assets/seabed.png'); background-position: center center; opacity: 0.8;"></div>
+      <div class="position-absolute" style="top:0; bottom: 0; left: 0; right: 0; background-position: center center; opacity: 0.8;"
+      :style="{'background-image':`url(${seabed})`}"></div>
       <h2 class="fw-bold">購物車清單</h2>
     </div>
     <div class="container py-4">
@@ -115,6 +116,7 @@
     </div>
 </template>
 <script>
+import seabed from '@/assets/seabed.png'
 import { Swiper, SwiperSlide } from 'swiper/vue'
 import { Navigation, Pagination } from 'swiper'
 // Import Swiper styles
@@ -133,7 +135,8 @@ export default {
     return{
         modules: [Navigation, Pagination],
         code:"",
-        products:[]
+        products:[],
+        seabed
     }
   },
   components: {
@@ -158,7 +161,7 @@ export default {
           }
             this.$http(tar_url)
             .then(res=>{
-            console.log(res)
+
             this.products=res.data.products
             })
         }
