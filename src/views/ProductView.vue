@@ -2,28 +2,6 @@
     <div class="container">
 <div class="row align-items-center">
         <div class="col-md-7">
-            <!-- 原版輪播 -->
-          <!-- <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-              <div class="carousel-item active">
-                <img src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80" class="d-block w-100" alt="...">
-              </div>
-              <div class="carousel-item">
-                <img src="https://images.unsplash.com/photo-1502743780242-f10d2ce370f3?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=1916&q=80" class="d-block w-100" alt="...">
-              </div>
-            </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-              <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-              <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-              <span class="carousel-control-next-icon" aria-hidden="true"></span>
-              <span class="sr-only">Next</span>
-            </a>
-          </div> -->
           <img :src="product.imageUrl" class="d-block w-100" alt="...">
         </div>
         <div class="col-md-5 mb-3">
@@ -62,7 +40,7 @@
               <button type="button" class="text-nowrap btn btn-dark w-100 py-2" @click="addToCart(product.id,qty)">加入購物車</button>
             </div>
           </div>
-        <div class="mt-5">{{ product.content }}</div>
+        <div class="mt-5">{{ product.description }}</div>
           
         </div>
       </div>
@@ -140,14 +118,8 @@
             :modules="modules"
             navigation
             :pagination="{ clickable: true }">
-            <swiper-slide>
-                <img src="https://images.unsplash.com/photo-1514888286974-6c03e2ca1dba?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1443&q=80" alt="">
-            </swiper-slide>
-            <swiper-slide>
-                <img src="https://images.unsplash.com/photo-1494256997604-768d1f608cac?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1529&q=80" alt="">
-            </swiper-slide>
-            <swiper-slide>
-                <img src="https://images.unsplash.com/photo-1478098711619-5ab0b478d6e6?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="">
+            <swiper-slide  v-for="(item) in products" :key=item.id>
+                <router-link :to="`/product/${item.id}`"><img :src="item.imageUrl" alt=""></router-link>
             </swiper-slide>
             </swiper>
         </div>
@@ -174,7 +146,9 @@ export default {
     return {
       modules: [Navigation, Pagination],
       product:{},
-      qty:1
+      products:[],
+      qty:1, 
+      category:''
     }
   },
   components: {
@@ -188,6 +162,15 @@ export default {
         this.$http.get(`${VITE_URL}/v2/api/${VITE_PATH}/product/${id}`)
         .then(res=>{
             this.product=res.data.product
+            this.category=res.data.product.category
+            this.getInterest()
+        })
+    },
+    getInterest(){
+      let tar_url=`${VITE_URL}/v2/api/${VITE_PATH}/products?category=${this.category}`
+      this.$http(tar_url)
+        .then(res=>{
+          this.products=res.data.products
         })
     },
     addOne(){
@@ -199,6 +182,11 @@ export default {
         }  
     },
     ...mapActions(cartStore,['addToCart'])
+  },
+  watch: {
+    '$route'() {
+      window.location.reload();
+    },
   },
   mounted() {
     this.getProduct()

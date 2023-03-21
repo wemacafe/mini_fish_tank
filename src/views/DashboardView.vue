@@ -3,31 +3,28 @@
       <div class=container>
         <nav class="navbar navbar-expand-lg navbar-light">
           <router-link class="navbar-brand fs-3" :to="`/`">角角流口水</router-link>
+          <p class="navbar-brand fs-5">後台控制頁面</p>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
           <div class="collapse navbar-collapse justify-content-end" id="navbarNavAltMarkup">
             <div class="navbar-nav">
-              <router-link class="nav-item nav-link me-4 active" to="/">首頁</router-link>
-              <router-link class="nav-item nav-link me-4" to="/products">產品</router-link>
-              <a class="nav-item nav-link me-4" href="https://github.com/wemacafe" target="_blank">關於我</a>
-              <router-link class="nav-item nav-link position-relative" to="/carts">
-                <i class="bi bi-cart4" style="font-size: 20px"></i>
-                <span class="position-absolute top-10 start-100 translate-middle rounded-pill badge bg-danger">
-                {{cartNum}}
-                </span>
-              </router-link>
+              <router-link class="nav-item nav-link me-4 active" to="/admin/adminproducts">後台產品列表</router-link>
+              <router-link class="nav-item nav-link me-4" to="/admin/adminorders">後台訂單列表</router-link>
+              <router-link class="nav-item nav-link me-4" to="/">回前台</router-link> |
+              <a href="" @click.prevent="logout">登出</a>
             </div>
           </div>
         </nav>
+
       </div>
     </div>
-    <!-- 拆出去HomeView ，要補RouterView來-->
+    <!-- 拆出去 ，要補RouterView來-->
     <router-view></router-view>
     <div id="footer" class="py-5">
       <div class="container">
         <div class="d-flex align-items-center justify-content-between text-white mb-md-7 mb-4">
-          <router-link class="text-white h4" style="text-decoration: none; color: inherit;"  :to="`/login`">角角流口水(後台)</router-link>
+          <a class="text-white h4" href="./index.html">角角流口水</a>
           <ul class="d-flex list-unstyled mb-0 h4">
             <li><a href="#" class="text-white mx-3"><i class="fab fa-facebook"></i></a></li>
             <li><a href="#" class="text-white mx-3"><i class="fab fa-instagram"></i></a></li>
@@ -45,25 +42,38 @@
     </div>
 </template>
 <script>
-import { mapActions, mapState } from 'pinia';
-import { RouterView,RouterLink } from 'vue-router'
-import cartStore from '../stores/cart';
+import { RouterLink,RouterView } from 'vue-router'
+const { VITE_URL } = import.meta.env
 export default {
-  components:{
+  components: {
     RouterView,
     RouterLink
   },
-  computed:{
-   ...mapState (cartStore,['carts','cartNum'])
+  methods: {
+    logout () {
+      // 把值拿掉
+      document.cookie = `hexToken=;expires=${new Date()}`
+      this.$router.push('/login')
+    },
+    checkAdmin () {
+      const url = `${VITE_URL}/v2/api/user/check`
+      this.$http.post(url)
+        .then((res) => {
+          console.log('login:', res)
+        })
+        .catch((err) => {
+          alert(err.response.data.message)
+          this.$router.push('/login')
+        })
+    }
   },
-  methods:{
-    ...mapActions(cartStore,['getCart'])
-  },
-  mounted(){
-    this.getCart()
+  mounted () {
+    // 取出 Token
+    const token = document.cookie.replace(/(?:(?:^|.*;\s*)hexToken\s*=\s*([^;]*).*$)|^.*$/, '$1')
+    this.$http.defaults.headers.common.Authorization = token
+    // axios.defaults.headers.common['Authorization'] = token;
+    console.log('token:', token)
+    this.checkAdmin()
   }
 }
 </script>
-<style lang="">
-    
-</style>

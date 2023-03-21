@@ -78,7 +78,7 @@
                 </a>
                 <div class="card-body p-0">
                   <h4 class="mb-0 mt-3">
-                    <router-link :to="`/product/${product.id}`">
+                    <router-link style="text-decoration: none; color: inherit;" :to="`/product/${product.id}`">
                         {{product.title}}
                     </router-link>
                   </h4>
@@ -90,7 +90,7 @@
             
           </div>
           <!-- pagination -->
-          <Pagination :pages="pagination" @emit-pages="getProducts"></Pagination>
+          <Pagination :pages="pagination" @emit-pages="updatePage"></Pagination>
           
         </div>
       </div>
@@ -121,7 +121,15 @@ export default {
         Pagination
     },
     methods:{
-        getProducts(cat){
+        updatePage(page=1){
+          let url=`${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`;
+          this.$http(url)
+            .then(res=>{
+            this.products=res.data.products
+            this.pagination = res.data.pagination
+            })
+        },
+        getProducts(cat,page=1){
           let tar_url=`${VITE_URL}/v2/api/${VITE_PATH}/products`;
           switch(cat){
             case"小魚缸":
@@ -131,7 +139,7 @@ export default {
               tar_url=`${VITE_URL}/v2/api/${VITE_PATH}/products?category=${cat}`
               break;
             default:
-              tar_url=`${VITE_URL}/v2/api/${VITE_PATH}/products`;
+              tar_url=`${VITE_URL}/v2/api/${VITE_PATH}/products?page=${page}`;
   
           }
             this.$http(tar_url)

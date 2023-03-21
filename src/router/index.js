@@ -39,7 +39,30 @@ const router = createRouter({
       path: '/checkout',
       name: 'checkout',
       component: () => import('../views/CheckoutView.vue')
-    }   
+    },
+    {
+      path: '/login',
+      component: () => import('../views/LoginView.vue')
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: () => import('../views/DashboardView.vue'),
+      children: [
+        {
+          path: '',
+          component: () => import('../views/AdminProducts.vue')
+        },
+        {
+          path: 'adminproducts',
+          component: () => import('../views/AdminProducts.vue')
+        },
+        {
+          path: 'adminorders',
+          component: () => import('../views/AdminOrders.vue')
+        }
+      ]
+    }    
   ]
 })
 

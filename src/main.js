@@ -37,7 +37,16 @@ import App from './App.vue'
 import router from './router'
 AOS.init()
 
+import { date, currency } from './methods/filters'
+
+import Loading from 'vue3-loading-overlay'
+import 'vue3-loading-overlay/dist/vue3-loading-overlay.css'
+
 const app = createApp(App)
+app.config.globalProperties.$filters = {
+  date,
+  currency
+}
 app.use(VueAxios, axios)
 app.use(createPinia())
 app.use(router)
@@ -45,4 +54,6 @@ app.component('font-awesome-icon', FontAwesomeIcon)
 app.component('VForm', Form)
 app.component('VField', Field)
 app.component('ErrorMessage', ErrorMessage)
+// eslint-disable-next-line vue/multi-word-component-names
+app.component('Loading', Loading)
 app.mount('#app')
