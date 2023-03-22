@@ -8,6 +8,8 @@
     right:0;
     background-position: center center; 
     opacity: 0.8;
+    overflow-x: hidden; /* 隱藏 x 軸 */
+  transform: translateZ(0); /* 啟用 GPU 加速 */
   }
   .fish {
     position: absolute;
@@ -53,6 +55,45 @@
     left: 15%;
     animation: dive 8s ease-in infinite;
   }
+
+  /* 在螢幕寬度小於 768px 時，讓 .fish 和 .diver 縮小至 50% */
+@media (max-width: 767px) {
+  .underwater{
+    background-size: contain;
+  }
+  .fish {
+    width: 100px;
+    height: 150px;
+    top: 2.5%;
+    left: 10%;
+  }
+  .diver {
+    width: 150px;
+    height: 100px;
+    bottom: 5%;
+    left: 5%;
+  }
+}
+
+/* 在螢幕寬度介於 768px 至 992px 時，讓 .fish 和 .diver 縮小至 75% */
+@media (min-width: 768px) and (max-width: 992px) {
+  .underwater{
+    background-size: contain;
+  }
+  .fish {
+    width: 150px;
+    height: 225px;
+    top: 3%;
+    left: 20%;
+  }
+  .diver {
+    width: 225px;
+    height: 150px;
+    bottom: 10%;
+    left: 10%;
+  }
+}
+
   
   @keyframes dive {
     0% {

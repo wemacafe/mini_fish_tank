@@ -52,7 +52,7 @@
     </div>
       <div class="container d-flex flex-column" style="min-height: 100vh;">
         <div class="row justify-content-center my-auto">
-          <div class="col-md-4 text-center">
+          <div class="col-lg-4 col-md-6 col-sm-8 col-xs-12 text-center">
             <h1 class="py-2 hero-title">角角流口水</h1>
             <p class="fs-4 mb-0">自己的魚、自己養，一起來翻轉小魚缸</p>
           </div>
